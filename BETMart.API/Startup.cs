@@ -31,9 +31,9 @@ namespace BETMart.API
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "BETMart API", Version = "v1" });
             });
             services.AddAutoMapper(typeof(Startup));
-            services.AddInfrastructure();
             services.AddPersistenceContexts(Configuration);
             services.AddRepositories();
+            services.AddBusinessLayer();
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
 
@@ -44,7 +44,7 @@ namespace BETMart.API
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "BETMart.API v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "BETMart API v1"));
             }
 
             app.UseHttpsRedirection();

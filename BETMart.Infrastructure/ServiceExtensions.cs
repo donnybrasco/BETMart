@@ -12,14 +12,11 @@ namespace BETMart.Infrastructure
 {
     public static class ServiceExtensions
     {
-        public static void AddInfrastructure(this IServiceCollection services)
-        {
-            services.AddScoped<ISettings, Settings>();
-        }
         public static void AddBusinessLayer(this IServiceCollection services)
         {
-            services.AddScoped<IHttpService, HttpService>();
-            services.AddScoped<IProductService, ProductService>();
+            services.AddTransient<ISettings, Settings>();
+            services.AddTransient<IHttpService, HttpService>();
+            services.AddTransient<IProductService, ProductService>();
         }
         public static void AddPersistenceContexts(this IServiceCollection services, IConfiguration configuration)
         {

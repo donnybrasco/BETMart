@@ -23,13 +23,12 @@ namespace BETMart
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<BETMartContext>(options => options.UseSqlServer(Configuration["ConnectionString:BETMartDb"]));
+            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddAutoMapper(typeof(Startup));
             services.AddControllersWithViews();
-            services.AddInfrastructure();
             services.AddPersistenceContexts(Configuration);
             services.AddRepositories();
             services.AddBusinessLayer();
-            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

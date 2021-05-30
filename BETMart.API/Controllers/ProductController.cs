@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 namespace BETMart.API.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class ProductController 
         : ControllerBase<ProductController>
     {
@@ -38,7 +38,7 @@ namespace BETMart.API.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpGet("GetById")]
         public async Task<BLL.Models.Product> Get(int productId)
         {
             try
