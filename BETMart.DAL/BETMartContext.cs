@@ -13,7 +13,6 @@ namespace BETMart.DAL
         int SaveChanges(string userId = null);
         int SaveChanges(bool acceptAllChangesOnSuccess, string userId = null);
         Task<int> SaveChangesAsync(string userId = null);
-
         Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = new CancellationToken(), string userId = null);
         //-----
         DbSet<User> Users { get; set; }
@@ -43,7 +42,7 @@ namespace BETMart.DAL
         {
             base.OnModelCreating(builder);
 
-            builder.InitializeSeedData();
+            //builder.InitializeSeedData();
         }
 
         #endregion

@@ -1,16 +1,26 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using BETMart.BLL.Services;
 
 namespace BETMart.Controllers
 {
     public class ProductController : Controller
     {
-        public IActionResult Index()
+        #region Ctor
+
+        private readonly IProductService _service;
+
+        public ProductController(IProductService service)
         {
-            return View();
+            _service = service;
+        }
+
+        #endregion
+
+        public async Task<IActionResult> Index()
+        {
+            var data = await _service.GetAllProducts();
+            return View(data);
         }
     }
 }
