@@ -1,4 +1,4 @@
-﻿namespace BETMart.DAL.Entities
+﻿namespace BETMart.Common
 {
     public enum OrderStatus
     {

@@ -8,16 +8,32 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BETMart.DAL
 {
+    public interface IBETMartContext
+    {
+        int SaveChanges(string userId = null);
+        int SaveChanges(bool acceptAllChangesOnSuccess, string userId = null);
+        Task<int> SaveChangesAsync(string userId = null);
+
+        Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = new CancellationToken(), string userId = null);
+        //-----
+        DbSet<User> Users { get; set; }
+        DbSet<Customer> Customers { get; set; }
+        DbSet<Address> Addresses { get; set; }
+        DbSet<BillingInformation> BillingInformations { get; set; }
+        DbSet<Product> Products { get; set; }
+        DbSet<Order> Orders { get; set; }
+        DbSet<OrderDetail> OrderDetails { get; set; }
+    }
     public class BETMartContext
         : DbContext
+        , IBETMartContext
     {
         #region Ctor
 
         public BETMartContext(DbContextOptions<BETMartContext> opts)
             : base(opts)
         {
-            
-        }
+    }
 
         #endregion
 
