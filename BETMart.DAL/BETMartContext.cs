@@ -37,6 +37,17 @@ namespace BETMart.DAL
 
         #endregion
 
+        #region OnModelCreating
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            builder.InitializeSeedData();
+        }
+
+        #endregion
+
         #region DbSets
 
         public DbSet<User> Users { get; set; }

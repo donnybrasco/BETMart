@@ -9,4 +9,10 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\BETMart.BLL\BETMart.BLL.csproj" />
+    <ProjectReference Include="..\BETMart.DAL\BETMart.DAL.csproj" />
+    <ProjectReference Include="..\BETMart.Infrastructure\BETMart.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>
