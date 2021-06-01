@@ -22,6 +22,10 @@ namespace BETMart.API
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
+        /// <summary>
+        /// ConfigureServices
+        /// </summary>
+        /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<BETMartContext>(options => options.UseSqlServer(Configuration["ConnectionString:BETMartDb"]));
@@ -31,6 +35,7 @@ namespace BETMart.API
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "BETMart API", Version = "v1" });
             });
+            services.AddSwagger();
             services.AddInfrastructure(Configuration);
             services.AddAutoMapper(typeof(Startup));
             services.AddPersistenceContexts(Configuration);
@@ -45,9 +50,15 @@ namespace BETMart.API
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "BETMart API v1"));
             }
+
+            app.UseSwagger();
+            app.UseSwaggerUI(options =>
+            {
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "BETMart API v1");
+                options.RoutePrefix = "swagger";
+                options.DisplayRequestDuration();
+            });
 
             app.UseHttpsRedirection();
 
@@ -55,6 +66,7 @@ namespace BETMart.API
 
             app.UseCors();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
