@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using BETMart.DAL.Core;
+using Microsoft.AspNetCore.Identity;
 
 namespace BETMart.DAL.Entities
 {
