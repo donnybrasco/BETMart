@@ -28,7 +28,6 @@ namespace BETMart.API
         /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<BETMartContext>(options => options.UseSqlServer(Configuration["ConnectionString:BETMartDb"]));
             services.AddControllers(); 
             services.AddCors();
             services.AddSwaggerGen(c =>

@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>BETMart.API</name>
+    </assembly>
+    <members>
+        <member name="M:BETMart.API.Controllers.IdentityController.GetTokenAsync(BETMart.BLL.Security.LoginModel)">
+            <summary>
+            Generates a JSON Web Token for a valid combination of emailId and password.
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:BETMart.API.Startup.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            ConfigureServices
+            </summary>
+            <param name="services"></param>
+        </member>
+    </members>
+</doc>
