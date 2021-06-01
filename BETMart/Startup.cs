@@ -24,6 +24,7 @@ namespace BETMart
         {
             services.AddDbContext<BETMartContext>(options => options.UseSqlServer(Configuration["ConnectionString:BETMartDb"]));
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddInfrastructure(Configuration);
             services.AddAutoMapper(typeof(Startup));
             services.AddControllersWithViews();
             services.AddPersistenceContexts(Configuration);
