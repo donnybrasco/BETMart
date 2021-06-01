@@ -25,7 +25,8 @@ namespace BETMart.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<BETMartContext>(options => options.UseSqlServer(Configuration["ConnectionString:BETMartDb"]));
-            services.AddControllers();
+            services.AddControllers(); 
+            services.AddCors();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "BETMart API", Version = "v1" });
@@ -50,6 +51,8 @@ namespace BETMart.API
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors();
 
             app.UseAuthorization();
 

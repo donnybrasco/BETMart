@@ -1,5 +1,4 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 using BETMart.BLL._Core;
 using BETMart.BLL.Services;
 using BETMart.DAL;
@@ -14,9 +13,11 @@ namespace BETMart.Infrastructure
     {
         public static void AddBusinessLayer(this IServiceCollection services)
         {
+            services.AddTransient<IUserService, UserService>();
             services.AddTransient<ISettings, Settings>();
             services.AddTransient<IHttpService, HttpService>();
             services.AddTransient<IProductService, ProductService>();
+            services.AddTransient<IOrderService, OrderService>();
         }
         public static void AddPersistenceContexts(this IServiceCollection services, IConfiguration configuration)
         {
@@ -30,6 +31,8 @@ namespace BETMart.Infrastructure
 
             services.AddTransient(typeof(IRepositoryAsync<>), typeof(RepositoryAsync<>));
             services.AddTransient<IProductRepository, ProductRepository>();
+            services.AddTransient<IOrderRepository, OrderRepository>();
+            services.AddTransient<IOrderDetailRepository, OrderDetailRepository>();
             services.AddTransient<IUnitOfWork, UnitOfWork>();
 
             #endregion Repositories

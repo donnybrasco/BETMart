@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using BETMart.DAL.Core;
 using BETMart.DAL.Entities;
@@ -14,6 +16,10 @@ namespace BETMart.DAL.Repositories
         Task<List<Order>> GetListAsync();
 
         Task<Order> GetByIdAsync(int orderId);
+
+        Task<List<Order>> FindAsync(Expression<Func<Order, bool>> expr);
+
+        Task<Order> FindFirstAsync(Expression<Func<Order, bool>> expr);
 
         Task<int> InsertAsync(Order order);
 
@@ -45,6 +51,16 @@ namespace BETMart.DAL.Repositories
         public async Task<List<Order>> GetListAsync()
         {
             return await _repository.Entities.ToListAsync();
+        }
+
+        public async Task<List<Order>> FindAsync(Expression<Func<Order, bool>> expr)
+        {
+            return await _repository.Entities.Include(x => x.OrderDetails).Where(expr).ToListAsync();
+        }
+
+        public async Task<Order> FindFirstAsync(Expression<Func<Order, bool>> expr)
+        {
+            return await _repository.Entities.Include(x => x.OrderDetails).FirstOrDefaultAsync(expr);
         }
 
         public async Task<int> InsertAsync(Order order)

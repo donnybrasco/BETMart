@@ -1,0 +1,24 @@
+﻿@font-face {
+    font-family: "BebasNeue-Regular";
+    src: url("fonts/BebasNeue-Regular.ttf"); /* IE9 */
+}
+@font-face {
+    font-family: "BebasNeue-Book";
+    src: url("fonts/BebasNeue-Book.ttf"); /* IE9 */
+}
+@font-face {
+    font-family: "BebasNeue-Bold";
+    src: url("fonts/BebasNeue-Bold.ttf"); /* IE9 */
+}
+@font-face {
+    font-family: "BebasNeue-Thin";
+    src: url("fonts/BebasNeue-Thin.ttf"); /* IE9 */
+}
+@font-face {
+    font-family: "BebasNeue-Light";
+    src: url("fonts/BebasNeue-Light.ttf"); /* IE9 */
+}
+@font-face {
+    font-family: "SweetSansPro-Regular";
+    src: url("fonts/SweetSansPro-Regular.ttf"); /* IE9 */
+}

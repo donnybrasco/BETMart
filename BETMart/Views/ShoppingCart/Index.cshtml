@@ -1,1 +1,168 @@
-﻿
+﻿@model ShoppingCartViewModel
+@{
+    ViewData["Title"] = "Shopping Cart";
+    Layout = "_Layout";
+}
+<!-- ============================================================== -->
+<!-- Bread crumb and right sidebar toggle -->
+<!-- ============================================================== -->
+<div class="row page-titles">
+    <div class="col-md-5 col-12 align-self-center">
+        <h3 class="text-themecolor mb-0">Shopping Cart</h3>
+        <ol class="breadcrumb mb-0 p-0 bg-transparent">
+            <li class="breadcrumb-item"><a href="javascript:void(0)">Home</a></li>
+            <li class="breadcrumb-item active">Shopping Cart</li>
+        </ol>
+    </div>
+    <div class="col-md-7 col-12 align-self-center d-none d-md-block">
+    </div>
+</div>
+<!-- ============================================================== -->
+<!-- End Bread crumb and right sidebar toggle -->
+<!-- ============================================================== -->
+<!-- ============================================================== -->
+<!-- Container fluid  -->
+<!-- ============================================================== -->
+<div class="container-fluid">
+    <!-- ============================================================== -->
+    <!-- Start Page Content -->
+    <!-- ============================================================== -->
+    <div class="row">
+        <form id="ShoppingCartForm" asp-action="UpdateShoppingCart" asp-controller="ShoppingCart" method="post" enctype="multipart/form-data">
+            <!-- Column -->
+            @Html.HiddenFor(x => x.Current.OrderId)
+            <div class="col-md-9 col-lg-9">
+                <div class="card">
+                    <div class="card-header bg-info">
+                        <h5 class="mb-0 text-white">Your Cart (@Model.TotalProducts item(s))</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table product-overview">
+                                <thead>
+                                <tr>
+                                    <th>Image</th>
+                                    <th>Product</th>
+                                    <th>Price</th>
+                                    <th>Quantity</th>
+                                    <th style="text-align: center">Total</th>
+                                    <th style="text-align: center">#</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @foreach (var orderDetail in Model.Current.OrderDetails)
+                                {
+                                    <tr>
+                                        <td width="150"><img src="data:image;base64,@Convert.ToBase64String(orderDetail.Product.Image)" alt="iMac" width="80"></td>
+                                        <td width="550">
+                                            <h5 class="font-500">@orderDetail.Product.Name</h5>
+                                            <p>@orderDetail.Product.Description</p>
+                                        </td>
+                                        <td>@orderDetail.Price</td>
+                                        <td width="70">
+                                            <input id="qtyCtrl_@orderDetail.OrderDetailId" type="text" class="form-control" placeholder="1">
+                                        </td>
+                                        <td width="150" align="center" class="font-500">@orderDetail.Total</td>
+                                        <td align="center"><a href="javascript:void(0)" class="text-success" title="" data-toggle="tooltip" data-original-title="Update" onclick="UpdateCart('@orderDetail.OrderDetailId')"><i class="ti-reload text-dark"></i></a></td>
+                                        <td align="center"><a href="javascript:void(0)" class="text-inverse" title="" data-toggle="tooltip" data-original-title="Delete" oncilck="RemoveFromCart('@orderDetail.OrderDetailId')"><i class="ti-trash text-dark"></i></a></td>
+                                    </tr>
+                                }
+                                </tbody>
+                            </table>
+                            <hr>
+                            <div class="d-flex no-block align-items-center">
+                                <button class="btn btn-dark btn-outline" asp-controller="Product" asp-action="Index"><i class="fas fa-arrow-left"></i> Continue shopping</button>
+                                <div class="ml-auto">
+                                    <button class="btn btn-danger" asp-controller="Checkout" asp-action="Index"><i class="fa fa fa-shopping-cart"></i> Checkout</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Column -->
+            <div class="col-md-3 col-lg-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">CART SUMMARY</h5>
+                        <hr>
+                        <small>Total Cost</small>
+                        <h2>@Model.TotalCost</h2>
+                        <hr>
+                        <button class="btn btn-success" asp-controller="Checkout" asp-action="Index">Checkout</button>
+                        <button class="btn btn-secondary btn-outline">Cancel</button>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">For Any Support</h5>
+                        <hr>
+                        <h4><i class="ti-mobile"></i> 031 012 3456 (Toll Free)</h4> <small>Please contact with us if you have any questions. We are available 24h.</small>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <!-- ============================================================== -->
+    <!-- End PAge Content -->
+    <!-- ============================================================== -->
+</div>
+@section Scripts
+{
+    <script>
+        //Update products on cart
+        function UpdateCart(orderDetailId) {
+            var qty = $("#qtyCtrl_" + orderDetail).val();
+            alert(qty);
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("UpdateShoppingCart")',
+                data: {
+                    orderDetailId: orderDetailId,
+                    quantity: qty
+                },
+                success: function(response) {
+                    alert(response.Message);
+                },
+                failure: function(response) {
+                    alert(response.Message);
+                },
+                error: function(response) {
+                    alert(response.Message);
+                },
+                processData: false,
+                contentType: false
+            }).done(function(response) {
+                toastr.success('Product updated successfully');
+                console.log(response);
+            });
+        }
+
+        //Remove product from cart
+        function RemoveFromCart(orderDetailId) {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("RemoveFromShoppingCart")',
+                data: {
+                    orderDetailId: orderDetailId
+                },
+                success: function(response) {
+                    alert(response.Message);
+                },
+                failure: function(response) {
+                    alert(response.Message);
+                },
+                error: function(response) {
+                    alert(response.Message);
+                },
+                processData: false,
+                contentType: false
+            });
+        }
+
+        //Checkout
+        function Checkout(orderId) {
+
+        }
+    </script>
+}

@@ -1,0 +1,328 @@
+﻿* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: #fff;
+    color: #222;
+    margin: 0;
+    padding: 0;
+}
+
+h1,
+h2,
+h3,
+p,
+div,
+blockquote,
+footer { font-family: "Helvetica Neue", Arial, sans-serif; }
+
+h1 {
+    background-color: #2196F3;
+    color: #FFF;
+    font-size: 26px;
+    font-weight: normal;
+    line-height: 26px;
+    padding: 20px 20px 16px 20px;
+}
+
+h1 svg {
+    height: 26px;
+    margin: 0 6px 4px 0;
+    vertical-align: middle;
+    width: 26px;
+}
+
+h1 svg path { fill: #FFF; }
+
+h1 .version {
+    background: #FFF;
+    border-radius: 2px;
+    color: #666;
+    float: right;
+    font-size: 14px;
+    font-weight: bold;
+    margin: -3px 0 0 0;
+    padding: 4px 10px;
+}
+
+h1 .version::before { content: 'v'; }
+
+h1 code {
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid transparent;
+    border-radius: 3px;
+    cursor: pointer;
+    float: right;
+    font-size: 20px;
+    margin: -3px 10px 0 0;
+    padding: 4px 12px;
+}
+
+h1 code:hover { border: 1px solid #FFF; }
+
+h1 code svg {
+    height: 24px;
+    margin: -1px -4px 0 -2px;
+    width: 24px;
+}
+
+h2 {
+    font-size: 18px;
+    padding: 20px;
+}
+
+h2 small {
+    color: #555;
+    font-size: 0.8rem;
+}
+
+h2 small::before { content: '('; }
+
+h2 small::after { content: ')'; }
+
+h2 span { position: relative; }
+
+h2.newicons span::before {
+    background: #3C90BE;
+    border-radius: 0.1rem;
+    bottom: -0.25rem;
+    content: ' ';
+    height: 0.2rem;
+    position: absolute;
+    width: 100%;
+}
+
+h2.deprecatedicons span::before {
+    background: #BE3C3C;
+    border-radius: 0.1rem;
+    bottom: -0.25rem;
+    content: ' ';
+    height: 0.2rem;
+    position: absolute;
+    width: 100%;
+}
+
+h3 {
+    font-size: 14px;
+    font-weight: bold;
+    padding: 10px 20px 0 20px;
+}
+
+p { padding: 10px 20px; }
+
+p code {
+    background: #F1F1F1;
+    border: 1px solid #DDD;
+    border-radius: 3px;
+    display: inline-block;
+    padding: 3px 5px;
+    vertical-align: middle;
+}
+
+p i.mdi {
+    border-radius: 4px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+p i.mdi.dark-demo { background: #333; }
+
+p.note {
+    color: #999;
+    font-size: 14px;
+    padding: 0 20px 5px 20px;
+}
+
+p.deprecated { margin: -0.5rem 0 0.25rem 0; }
+
+p.extras { margin-top: -0.5rem; }
+
+div.icons {
+    -moz-column-count: 5;
+    -moz-column-gap: 20px;
+    -webkit-column-count: 5;
+    -webkit-column-gap: 20px;
+    column-count: 5;
+    column-gap: 20px;
+    padding: 0 20px 10px 20px;
+}
+
+div.icons div { line-height: 2em; }
+
+div.icons div span {
+    cursor: pointer;
+    display: inline-block;
+    font-size: 14px;
+    max-width: calc(100% - 90px);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+div.icons div code:hover,
+div.icons div span:hover,
+div.icons div i:hover { color: #3c90be; }
+
+div.icons div code:hover { border-color: #3c90be; }
+
+div.icons div code {
+    border: 1px solid #DDD;
+    border-radius: 4px;
+    cursor: pointer;
+    display: inline-block;
+    line-height: 24px;
+    margin-left: 2px;
+    margin-right: 4px;
+    text-align: center;
+    vertical-align: middle;
+    width: 46px;
+}
+
+div.icons div i {
+    cursor: pointer;
+    display: inline-block;
+    height: 24px;
+    line-height: 24px;
+    text-align: center;
+    vertical-align: middle;
+    width: 32px;
+}
+
+div.icons .mdi::before { font-size: 24px; }
+
+div.icons div.new::before {
+    background: #3C90BE;
+    border-radius: 0.1rem;
+    content: ' ';
+    height: 1.75rem;
+    margin-left: -0.25rem;
+    margin-top: 0.25rem;
+    position: absolute;
+    width: 0.2rem;
+}
+
+div.icons div.deprecated::before {
+    background: #BE3C3C;
+    border-radius: 0.1rem;
+    content: ' ';
+    height: 1.75rem;
+    margin-left: -0.25rem;
+    margin-top: 0.25rem;
+    position: absolute;
+    width: 0.2rem;
+}
+
+pre {
+    background: #F1F1F1;
+    border: 1px solid #DDD;
+    font-family: Consolas, monospace;
+    margin: 0 20px;
+    padding: 10px;
+}
+
+blockquote {
+    margin: 1rem 1rem 0 1rem;
+    padding: 0.5rem 0.5rem 0.5rem 0.75rem;
+    position: relative;
+}
+
+blockquote.note::before {
+    background: #DDD;
+    border-radius: 0.25rem;
+    content: ' ';
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 0.25rem;
+}
+
+blockquote.deprecated::before {
+    background: #BE3C3C;
+    border-radius: 0.25rem;
+    content: ' ';
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 0.25rem;
+}
+
+div.copied {
+    background-color: #dff0d8;
+    border: 1px solid #d6e9c6;
+    border-radius: 4px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    color: #3c763d;
+    left: 50%;
+    margin-left: -100px;
+    padding: 10px 15px;
+    position: fixed;
+    text-align: center;
+    top: 100px;
+    width: 200px;
+}
+
+div.examples {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0.5rem 1.25rem;
+}
+
+div.examples > div {
+    display: flex;
+    margin-bottom: 0.5rem;
+    margin-right: 0.5rem;
+}
+
+div.examples > div > div:first-child {
+    align-items: center;
+    background: #FFF;
+    border-radius: 0.25rem;
+    box-shadow: 0 0 0.25rem rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    padding: 0.5rem;
+    z-index: 1;
+}
+
+div.examples > div > div:first-child + div {
+    background: #222;
+    border-radius: 0 0.25rem 0.25rem 0;
+    display: flex;
+    margin-left: -0.25rem;
+    padding: 0.5rem 0.75rem 0.5rem 1rem;
+}
+
+div.examples > div > div:first-child + div > code {
+    align-self: center;
+    color: #FFF;
+}
+
+div.examples > div > div.dark:first-child { background: #444; }
+
+div.examples i { display: flex; }
+
+div.examples-size > div > div:first-child { min-width: 3rem; }
+
+footer {
+    background: #F1F1F1;
+    border-top: 1px solid #DDD;
+    color: #666;
+    display: flex;
+    padding: 20px;
+}
+
+footer > div:first-child { flex: 1; }
+
+footer > div:last-child { text-align: right; }
+
+footer a {
+    color: #e91e63;
+    text-decoration: none;
+}
+
+footer a:hover { text-decoration: underline; }

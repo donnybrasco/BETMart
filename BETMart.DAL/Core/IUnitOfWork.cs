@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -8,6 +6,8 @@ namespace BETMart.DAL.Core
 {
     public interface IUnitOfWork : IDisposable
     {
+        Task<int> Commit();
+        Task<int> Commit(string userId);
         Task<int> Commit(CancellationToken cancellationToken);
 
         Task Rollback();
@@ -25,6 +25,14 @@ namespace BETMart.DAL.Core
         public async Task<int> Commit(CancellationToken cancellationToken)
         {
             return await _dbContext.SaveChangesAsync(cancellationToken);
+        }
+        public async Task<int> Commit(string userId)
+        {
+            return await _dbContext.SaveChangesAsync(userId);
+        }
+        public async Task<int> Commit()
+        {
+            return await _dbContext.SaveChangesAsync();
         }
 
         public Task Rollback()

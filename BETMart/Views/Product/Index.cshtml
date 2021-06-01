@@ -27,46 +27,67 @@
 <!-- ============================================================== -->
 <!-- Start Page Content -->
 <!-- ============================================================== -->
-<div class="row el-element-overlay">
-@foreach (var product in Model)
-{
-    <div class="col-lg-3 col-md-6">
-        <div class="card">
-            <div class="el-card-item pb-3">
-                <div class="el-card-avatar mb-3 el-overlay-1 w-100 overflow-hidden position-relative text-center">
-                    <img src="data:image;base64,@Convert.ToBase64String(product.Image)" class="d-block position-relative w-100" alt="user"/>
-                    <div class="el-overlay w-100 overflow-hidden">
-                        <ul class="list-style-none el-info text-white text-uppercase d-inline-block p-0">
-                            <li class="el-item d-inline-block my-0  mx-1"><a class="btn default btn-outline image-popup-vertical-fit el-link text-white border-white" onclick="ViewProduct('@product.ProductId')" href="javascript:void(0);"><i class="icon-magnifier"></i></a></li>
-                            <li class="el-item d-inline-block my-0  mx-1"><a class="btn default btn-outline el-link text-white border-white" href="javascript:void(0);" onclick="AddToCart('@product.ProductId')"><i class="icon-link"></i></a></li>
-                        </ul>
+    <form id="ProductsForm" asp-action="AddShoppingCart" asp-controller="ShoppingCart" method="post" enctype="multipart/form-data">
+        <div class="row el-element-overlay">
+            @foreach (var product in Model)
+            {
+                <div class="col-lg-3 col-md-6">
+                    <div class="card">
+                        <div class="el-card-item pb-3">
+                            <div class="el-card-avatar mb-3 el-overlay-1 w-100 overflow-hidden position-relative text-center">
+                                <img src="data:image;base64,@Convert.ToBase64String(product.Image)" class="d-block position-relative w-100" alt="user" />
+                                <div class="el-overlay w-100 overflow-hidden">
+                                    <ul class="list-style-none el-info text-white text-uppercase d-inline-block p-0">
+                                        <li class="el-item d-inline-block my-0  mx-1"><a class="btn default btn-outline image-popup-vertical-fit el-link text-white border-white" onclick="ViewProduct('@product.ProductId')" href="javascript:void(0);"><i class="icon-eye-open"></i></a></li>
+                                        <li class="el-item d-inline-block my-0  mx-1"><a class="btn default btn-outline el-link text-white border-white" href="javascript:void(0);" onclick="AddToCart('@product.ProductId')"><i class="icon-shopping-cart"></i></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="d-flex no-block align-items-center">
+                                <div class="ml-3">
+                                    <h4 class="mb-0">@product.Name</h4>
+                                    <span class="text-muted">@product.Description</span>
+                                </div>
+                                <div class="ml-auto mr-3">
+                                    <button type="button" class="btn btn-dark">@product.Price</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="d-flex no-block align-items-center">
-                    <div class="ml-3">
-                        <h4 class="mb-0">@product.Name</h4>
-                        <span class="text-muted">@product.Description</span>
-                    </div>
-                    <div class="ml-auto mr-3">
-                        <button type="button" class="btn btn-dark">@product.Price</button>
-                    </div>
-                </div>
-            </div>
+            }
         </div>
-    </div>
-}
-</div>
-<!-- ============================================================== -->
-<!-- End PAge Content -->
-<!-- ============================================================== -->
+    </form>
+        <!-- ============================================================== -->
+        <!-- End PAge Content -->
+        <!-- ============================================================== -->
 </div>
 @section Scripts
 {
     <script>
         //Add product to cart
         function AddToCart(productId) {
-            alert(productId);
+            var formAction = $("#ProductsForm").attr("action");
+
+            $.ajax({
+                type: 'post',
+                url: formAction,
+                data: {
+                    productId: productId
+                },
+                processData: false,
+                contentType: false
+            }).done(function(result) {
+                toastr.success('Product added successfully');
+                console.log(result);
+                if (result.status === "success") {
+                    alert(result.url);
+                } else {
+                    alert(result.message);
+                }
+            });
         }
+
         //View Product
         function ViewProduct(productId) {
 
