@@ -16,7 +16,15 @@ namespace BETMart.DAL.Entities
         public string Email { get; set; }
         [Required]
         [MaxLength(50)]
-
+        public string FirstName { get; set; }
+        [Required]
+        [MaxLength(50)]
+        public string LastName { get; set; }
+        [Required]
+        [MaxLength(50)]
         public string Password { get; set; }
+        public virtual bool EmailConfirmed { get; set; }
+        public byte[] ProfilePicture { get; set; }
+        public bool IsActive { get; set; } = false;
     }
 }

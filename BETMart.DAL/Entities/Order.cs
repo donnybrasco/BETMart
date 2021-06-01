@@ -22,6 +22,6 @@ namespace BETMart.DAL.Entities
 
         public OrderStatus OrderStatus { get; set; }
 
-        public virtual List<OrderDetail> OrderDetails { get; set; }
+        public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
     }
 }

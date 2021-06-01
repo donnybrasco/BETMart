@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@model BETMart.BLL.Security.LoginModel
+<!DOCTYPE html>
 <html dir="ltr">
 
 <head>
@@ -136,14 +137,15 @@
     <!-- -------------------------------------------------------------- -->
     <!-- This page plugin js -->
     <!-- -------------------------------------------------------------- -->
-    <script>$(".preloader").fadeOut();
-    // ==============================================================
-    // Login and Recover Password
-    // ==============================================================
-    $('#to-recover').on("click", function() {
-        $("#loginform").slideUp();
-        $("#recoverform").fadeIn();
-    });</script>
+    <script>
+    $(".preloader").fadeOut();
+        // ==============================================================
+        // Login and Recover Password
+        // ==============================================================
+        $('#to-recover').on("click", function () {
+            $("#loginform").slideUp();
+            $("#recoverform").fadeIn();
+        });</script>
 </body>
 
 </html>

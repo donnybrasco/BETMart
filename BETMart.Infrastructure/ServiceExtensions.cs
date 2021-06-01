@@ -1,5 +1,7 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using BETMart.BLL._Core;
+using BETMart.BLL.Notifications;
 using BETMart.BLL.Services;
 using BETMart.DAL;
 using BETMart.DAL.Core;
@@ -11,6 +13,19 @@ namespace BETMart.Infrastructure
 {
     public static class ServiceExtensions
     {
+        public static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.Configure<MailSettings>("MailSettings", a =>
+            {
+                a.DisplayName = configuration["MailSettings:DisplayName"];
+                a.From = configuration["MailSettings:From"];
+                a.Host = configuration["MailSettings:Host"];
+                a.Port = Convert.ToInt32(configuration["MailSettings:Port"]);
+                a.UserName = configuration["MailSettings:UserName"];
+                a.Password = configuration["MailSettings:Password"];
+            });
+            services.AddTransient<IMailService, SMTPMailService>();
+        }
         public static void AddBusinessLayer(this IServiceCollection services)
         {
             services.AddTransient<IUserService, UserService>();

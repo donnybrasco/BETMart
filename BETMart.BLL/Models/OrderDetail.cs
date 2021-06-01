@@ -7,7 +7,10 @@ namespace BETMart.BLL.Models
     {
         public int OrderDetailId { get; set; }
         [Required]
+        [DataType(DataType.Currency)]
+        [DisplayFormat(DataFormatString = "{0:C0}")]
         public decimal Price { get; set; }
+        [Required]
         public int Quantity { get; set; }
         public int OrderId { get; set; }
         public Order Order { get; set; }
@@ -19,6 +22,8 @@ namespace BETMart.BLL.Models
 
         public Product Product { get; set; }
 
+        [DataType(DataType.Currency)]
+        [DisplayFormat(DataFormatString = "{0:C0}")]
         public decimal Total => this.Price * this.Quantity;
     }
 }

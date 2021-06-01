@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 
 namespace BETMart.API.Controllers
 {
-    public class ControllerBase<T> : Controller
+    public class ControllerBase<T> : ControllerBase
     {
         private ILogger<T> _logger;
         private IMapper _mapper;

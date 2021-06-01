@@ -60,7 +60,12 @@ namespace BETMart.DAL.Repositories
 
         public async Task<Order> FindFirstAsync(Expression<Func<Order, bool>> expr)
         {
-            return await _repository.Entities.Include(x => x.OrderDetails).FirstOrDefaultAsync(expr);
+            var order = await _repository.Entities
+                                    .Include(x => x.OrderDetails)
+                                    .ThenInclude(xa => xa.Product)
+                                    .FirstOrDefaultAsync(expr);
+            
+            return order;
         }
 
         public async Task<int> InsertAsync(Order order)

@@ -27,7 +27,7 @@
 <!-- ============================================================== -->
 <!-- Start Page Content -->
 <!-- ============================================================== -->
-    <form id="ProductsForm" asp-action="AddShoppingCart" asp-controller="ShoppingCart" method="post" enctype="multipart/form-data">
+    <form id="ProductsForm" asp-action="AddToShoppingCart" asp-controller="ShoppingCart" method="post" enctype="multipart/form-data">
         <div class="row el-element-overlay">
             @foreach (var product in Model)
             {
@@ -70,20 +70,16 @@
             var formAction = $("#ProductsForm").attr("action");
 
             $.ajax({
-                type: 'post',
-                url: formAction,
-                data: {
-                    productId: productId
+                type: "POST",
+                url: `${formAction}?productId=${productId}`,
+                contentType: "application/json",
+                dataType: "json",
+                async: true,
+                success: function(response) {
+                    alert("Success " + response.Message);
                 },
-                processData: false,
-                contentType: false
-            }).done(function(result) {
-                toastr.success('Product added successfully');
-                console.log(result);
-                if (result.status === "success") {
-                    alert(result.url);
-                } else {
-                    alert(result.message);
+                failure: function(response) {
+                    alert("Error " + response.Message);
                 }
             });
         }

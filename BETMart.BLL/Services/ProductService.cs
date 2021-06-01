@@ -33,9 +33,9 @@ namespace BETMart.BLL.Services
             try
             {
                 using HttpClient client = new HttpClient {BaseAddress = new Uri(_configuration["AppSettings:BETMart.API"]) };
-                MediaTypeWithQualityHeaderValue contentType = new MediaTypeWithQualityHeaderValue(Infrastructure.Common.ContentType.Json);
+                MediaTypeWithQualityHeaderValue contentType = new MediaTypeWithQualityHeaderValue(Common.Common.ContentType.Json);
                 client.DefaultRequestHeaders.Accept.Add(contentType);
-                HttpResponseMessage response = await client.GetAsync(Infrastructure.Common.APIEndpoint.Product);
+                HttpResponseMessage response = await client.GetAsync(Common.Common.APIEndpoint.Product);
                 string stringData = await response.Content.ReadAsStringAsync();
                 return JsonConvert.DeserializeObject<List<Product>>(stringData);
             }
@@ -51,8 +51,8 @@ namespace BETMart.BLL.Services
             {
                 using HttpClient client = new HttpClient { BaseAddress = new Uri(_configuration["AppSettings:BETMart.API"]) };
                 string stringData = JsonConvert.SerializeObject(obj);
-                var contentData = new StringContent(stringData, Encoding.UTF8, Infrastructure.Common.ContentType.Json);
-                HttpResponseMessage response = await client.PostAsync(Infrastructure.Common.APIEndpoint.Product, contentData);
+                var contentData = new StringContent(stringData, Encoding.UTF8, Common.Common.ContentType.Json);
+                HttpResponseMessage response = await client.PostAsync(Common.Common.APIEndpoint.Product, contentData);
                 await response.Content.ReadAsStringAsync();
             }
             catch (Exception ex)
@@ -67,8 +67,8 @@ namespace BETMart.BLL.Services
             {
                 using var client = new HttpClient { BaseAddress = new Uri(_configuration["AppSettings:BETMart.API"]) };
                 string stringData = JsonConvert.SerializeObject(obj);
-                var contentData = new StringContent(stringData, Encoding.UTF8, Infrastructure.Common.ContentType.Json);
-                HttpResponseMessage response = await client.PutAsync($"{Infrastructure.Common.APIEndpoint.Product}/{obj.ProductId}", contentData);
+                var contentData = new StringContent(stringData, Encoding.UTF8, Common.Common.ContentType.Json);
+                HttpResponseMessage response = await client.PutAsync($"{Common.Common.APIEndpoint.Product}/{obj.ProductId}", contentData);
                 await response.Content.ReadAsStringAsync();
             }
             catch (Exception ex)
@@ -82,7 +82,7 @@ namespace BETMart.BLL.Services
             try
             {
                 using var client = new HttpClient { BaseAddress = new Uri(_configuration["AppSettings:BETMart.API"]) };
-                HttpResponseMessage response = await client.DeleteAsync($"{Infrastructure.Common.APIEndpoint.Product}/{productId}");
+                HttpResponseMessage response = await client.DeleteAsync($"{Common.Common.APIEndpoint.Product}/{productId}");
                 await response.Content.ReadAsStringAsync();
             }
             catch (Exception ex)

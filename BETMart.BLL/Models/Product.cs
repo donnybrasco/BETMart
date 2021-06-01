@@ -13,6 +13,8 @@ namespace BETMart.BLL.Models
         [MaxLength(1000)]
         public string Description { get; set; }
         [Required]
+        [DataType(DataType.Currency)]
+        [DisplayFormat(DataFormatString = "{0:C0}")]
         public decimal Price { get; set; }
         public byte[] Image { get; set; }
         public DateTime CreatedDate { get; set; }

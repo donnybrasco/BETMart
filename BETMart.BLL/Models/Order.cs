@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace BETMart.BLL.Models
 {
@@ -8,6 +9,8 @@ namespace BETMart.BLL.Models
         public int OrderId { get; set; }
         public DateTime OrderDate { get; set; }
         public int CustomerId { get; set; }
+        [DataType(DataType.Currency)]
+        [DisplayFormat(DataFormatString = "{0:C0}")]
         public decimal Total { get; set; }
         public string OrderStatus { get; set; }
         public virtual List<OrderDetail> OrderDetails { get; set; }

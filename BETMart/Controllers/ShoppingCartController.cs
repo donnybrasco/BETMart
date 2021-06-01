@@ -27,13 +27,13 @@ namespace BETMart.Controllers
                 Current = response.Data,
                 ErrorMessage = response.Message
             };
-            return View(model);
+            return View("Index", model);
         }
 
         [HttpPost]
         public async Task<IActionResult> AddToShoppingCart(int productId)
         {
-            var response = await _service.AddToShoppingCart(productId, 1);
+            var response = await _service.AddToShoppingCart(productId);
             return Ok(response);
         }
 

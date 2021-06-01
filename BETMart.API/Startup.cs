@@ -31,6 +31,7 @@ namespace BETMart.API
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "BETMart API", Version = "v1" });
             });
+            services.AddInfrastructure(Configuration);
             services.AddAutoMapper(typeof(Startup));
             services.AddPersistenceContexts(Configuration);
             services.AddRepositories();

@@ -1,4 +1,4 @@
-﻿namespace BETMart.Infrastructure
+﻿namespace BETMart.Common
 {
     public class Common
     {
@@ -8,7 +8,16 @@
         }
         public class APIEndpoint
         {
+            public const string Order = "/api/Order";
             public const string Product = "/api/Product";
+            public const string Login = "/Token";
+            public const string Register = "/api/Account/Register";
+        }
+
+        public enum Roles
+        {
+            SuperAdmin,
+            Basic
         }
     }
 }

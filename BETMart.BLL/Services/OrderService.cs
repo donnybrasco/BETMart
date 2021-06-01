@@ -12,7 +12,7 @@ namespace BETMart.BLL.Services
 {
     public interface IOrderService
     {
-        Task<Response> AddToShoppingCart(int productId, int quantity);
+        Task<Response> AddToShoppingCart(int productId);
         Task<Response<Order>> GetShoppingCart();
         Task<Response> UpdateShoppingCart(int orderDetailId, int quantity);
         Task<Response> RemoveFromShoppingCart(int orderDetailId);
@@ -47,7 +47,7 @@ namespace BETMart.BLL.Services
 
         #endregion
 
-        public async Task<Response> AddToShoppingCart(int productId, int quantity)
+        public async Task<Response> AddToShoppingCart(int productId)
         {
             try
             {
@@ -67,12 +67,12 @@ namespace BETMart.BLL.Services
                 var orderDetail = new OrderDetail
                 {
                     ProductId = productId,
-                    Quantity = quantity,
-                    OrderId = order.OrderId,
+                    Quantity = 1,
+                    Order = order,
                     Price = product.Price
                 };
-
-                order.OrderDetails.Add(orderDetail);
+                
+                await _orderDetailRepository.InsertAsync(orderDetail);
 
                 await _unitOfWork.Commit(_userService.Name);
 
@@ -88,7 +88,7 @@ namespace BETMart.BLL.Services
         {
             try
             {
-                var order = await _orderRepository.FindFirstAsync(x => x.CustomerId == _userService.UserId);
+                var order = await _orderRepository.FindFirstAsync(x => x.CustomerId == _userService.UserId && x.OrderStatus == OrderStatus.New);
                 if (order == null)
                 {
                     return new Response<Order>

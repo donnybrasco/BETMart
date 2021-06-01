@@ -7,12 +7,6 @@ namespace BETMart.DAL.Entities
     public class Customer
         : User
     {
-        [Required]
-        [MaxLength(50)]
-        public string FirstName { get; set; }
-        [Required]
-        [MaxLength(50)]
-        public string LastName { get; set; }
         [Phone]
         [MaxLength(13)]
         public string Phone { get; set; }
