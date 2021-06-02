@@ -13,7 +13,7 @@ namespace BETMart.BLL.Services
     public interface IOrderService
     {
         Task<Response> AddToShoppingCart(int productId);
-        Task<Response<Order>> GetShoppingCart();
+        Task<Response<Order>> GetCurrentOrder();
         Task<Response> UpdateShoppingCart(int orderDetailId, int quantity);
         Task<Response> RemoveFromShoppingCart(int orderDetailId);
     }
@@ -84,7 +84,7 @@ namespace BETMart.BLL.Services
             }
         }
 
-        public async Task<Response<Order>> GetShoppingCart()
+        public async Task<Response<Order>> GetCurrentOrder()
         {
             try
             {

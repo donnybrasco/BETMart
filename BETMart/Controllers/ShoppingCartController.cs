@@ -1,10 +1,11 @@
 ﻿using System.Threading.Tasks;
-using BETMart.BLL._Core;
 using BETMart.BLL.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BETMart.Controllers
 {
+    [Authorize]
     public class ShoppingCartController 
         : ControllerBase<ShoppingCartController>
     {
@@ -21,7 +22,7 @@ namespace BETMart.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var response = await _service.GetShoppingCart();
+            var response = await _service.GetCurrentOrder();
             var model = new ShoppingCartViewModel
             {
                 Current = response.Data,

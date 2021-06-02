@@ -1,10 +1,13 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using BETMart.BLL.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BETMart.Controllers
 {
-    public class ProductController : Controller
+    [Authorize]
+    public class ProductController 
+        : ControllerBase<ProductController>
     {
         #region Ctor
 

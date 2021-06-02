@@ -3,35 +3,73 @@ using System.Threading.Tasks;
 
 namespace BETMart.BLL._Core
 {
-    public class Response<T>
-        : Response
-        where T : class
-    {
-        public T Data { get; set; }
+    // public class Response<T>
+    //     : Response
+    //     where T : class
+    // {
+    //     public T Data { get; set; }
+    //
+    //     public static Response<T> Success(T data, string message)
+    //     {
+    //         return new Response<T>
+    //         {
+    //             IsSuccessful = true,
+    //             Message = message,
+    //             Data = data
+    //         };
+    //     }
+    //     public new static Response<T> Fail(string message)
+    //     {
+    //         return new Response<T>
+    //         {
+    //             IsSuccessful = false,
+    //             Message = message
+    //         };
+    //     }
+    // }
+    //
+    // public class Response
+    // {
+    //     public bool IsSuccessful { get; set; }
+    //     public string Message { get; set; }
+    //     public static Response Success(string message)
+    //     {
+    //         return new Response
+    //         {
+    //             IsSuccessful = true,
+    //             Message = message
+    //         };
+    //     }
+    //     public static Response Fail(string message)
+    //     {
+    //         return new Response
+    //         {
+    //             IsSuccessful = false,
+    //             Message = message
+    //         };
+    //     }
+    // }
 
-        public static Response<T> Success(T data, string message)
-        {
-            return new Response<T>
-            {
-                IsSuccessful = true,
-                Message = message,
-                Data = data
-            };
-        }
-        public new static Response<T> Fail(string message)
-        {
-            return new Response<T>
-            {
-                IsSuccessful = false,
-                Message = message
-            };
-        }
+    public interface IResponse<out T> : IResponse
+    {
+        T Data { get; }
     }
 
-    public class Response
+    public interface IResponse
     {
-        public bool IsSuccessful { get; set; }
+        string Message { get; set; }
+
+        bool IsSuccessful { get; set; }
+    }
+
+    public class Response : IResponse
+    {
+        public bool Failed => !this.IsSuccessful;
+
         public string Message { get; set; }
+
+        public bool IsSuccessful { get; set; }
+
         public static Response Success(string message)
         {
             return new Response
@@ -48,136 +86,86 @@ namespace BETMart.BLL._Core
                 Message = message
             };
         }
-    }
 
-    public class ErrorResponse<T>
-        : Response<T>
-        where T : class
-    {
-        public List<string> Errors { get; set; }
-        public static ErrorResponse<T> Fail(string message, List<string> errors)
+        public static IResponse Fail() => (IResponse)new Response()
         {
-            return new ErrorResponse<T>
-            {
-                IsSuccessful = false,
-                Message = message,
-                Errors = errors,
-                Data = null
-            };
-        }
-    }
-
-    public interface IResult<out T> : IResult
-    {
-        T Data { get; }
-    }
-
-    public interface IResult
-    {
-        string Message { get; set; }
-
-        bool Succeeded { get; set; }
-    }
-
-    public class Result : IResult
-    {
-        public bool Failed => !this.Succeeded;
-
-        public string Message { get; set; }
-
-        public bool Succeeded { get; set; }
-
-        public static IResult Fail() => (IResult)new Result()
-        {
-            Succeeded = false
+            IsSuccessful = false
         };
+        
+        public static Task<IResponse> FailAsync() => Task.FromResult<IResponse>(Response.Fail());
 
-        public static IResult Fail(string message) => (IResult)new Result()
+        public static Task<IResponse> FailAsync(string message) => Task.FromResult<IResponse>(Response.Fail(message));
+
+        public static IResponse Success() => (IResponse)new Response()
         {
-            Succeeded = false,
-            Message = message
+            IsSuccessful = true
         };
+        
+        public static Task<IResponse> SuccessAsync() => Task.FromResult<IResponse>(Response.Success());
 
-        public static Task<IResult> FailAsync() => Task.FromResult<IResult>(Result.Fail());
-
-        public static Task<IResult> FailAsync(string message) => Task.FromResult<IResult>(Result.Fail(message));
-
-        public static IResult Success() => (IResult)new Result()
-        {
-            Succeeded = true
-        };
-
-        public static IResult Success(string message) => (IResult)new Result()
-        {
-            Succeeded = true,
-            Message = message
-        };
-
-        public static Task<IResult> SuccessAsync() => Task.FromResult<IResult>(Result.Success());
-
-        public static Task<IResult> SuccessAsync(string message) => Task.FromResult<IResult>(Result.Success(message));
+        public static Task<IResponse> SuccessAsync(string message) => Task.FromResult<IResponse>(Response.Success(message));
     }
-    public class Result<T> : Result, IResult<T>, IResult
+    public class Response<T> : Response, IResponse<T>, IResponse
     {
         public T Data { get; set; }
 
-        public static Result<T> Fail()
+        public static Response<T> Fail()
         {
-            Result<T> result = new Result<T>();
-            result.Succeeded = false;
-            return result;
+            Response<T> response = new Response<T>();
+            response.IsSuccessful = false;
+            return response;
         }
 
-        public static Result<T> Fail(string message)
+        public static Response<T> Fail(string message)
         {
-            Result<T> result = new Result<T>();
-            result.Succeeded = false;
-            result.Message = message;
-            return result;
+            Response<T> response = new Response<T>();
+            response.IsSuccessful = false;
+            response.Message = message;
+            return response;
         }
 
-        public static Task<Result<T>> FailAsync() => Task.FromResult<Result<T>>(Result<T>.Fail());
+        public static Task<Response<T>> FailAsync() => Task.FromResult<Response<T>>(Response<T>.Fail());
 
-        public static Task<Result<T>> FailAsync(string message) => Task.FromResult<Result<T>>(Result<T>.Fail(message));
+        public static Task<Response<T>> FailAsync(string message) => Task.FromResult<Response<T>>(Response<T>.Fail(message));
 
-        public static Result<T> Success()
+        public static Response<T> Success()
         {
-            Result<T> result = new Result<T>();
-            result.Succeeded = true;
-            return result;
+            Response<T> response = new Response<T>();
+            response.IsSuccessful = true;
+            return response;
         }
 
-        public static Result<T> Success(string message)
+        public static Response<T> Success(string message)
         {
-            Result<T> result = new Result<T>();
-            result.Succeeded = true;
-            result.Message = message;
-            return result;
+            Response<T> response = new Response<T>();
+            response.IsSuccessful = true;
+            response.Message = message;
+            return response;
         }
 
-        public static Result<T> Success(T data)
+        public static Response<T> Success(T data)
         {
-            Result<T> result = new Result<T>();
-            result.Succeeded = true;
-            result.Data = data;
-            return result;
+            Response<T> response = new Response<T>();
+            response.IsSuccessful = true;
+            response.Data = data;
+            return response;
         }
 
-        public static Result<T> Success(T data, string message)
+        public static Response<T> Success(T data, string message)
         {
-            Result<T> result = new Result<T>();
-            result.Succeeded = true;
-            result.Data = data;
-            result.Message = message;
-            return result;
+            Response<T> response = new Response<T>();
+            response.IsSuccessful = true;
+            response.Data = data;
+            response.Message = message;
+            return response;
         }
 
-        public static Task<Result<T>> SuccessAsync() => Task.FromResult<Result<T>>(Result<T>.Success());
+        public static Task<Response<T>> SuccessAsync() => Task.FromResult<Response<T>>(Response<T>.Success());
 
-        public static Task<Result<T>> SuccessAsync(string message) => Task.FromResult<Result<T>>(Result<T>.Success(message));
+        public static Task<Response<T>> SuccessAsync(string message) => Task.FromResult<Response<T>>(Response<T>.Success(message));
 
-        public static Task<Result<T>> SuccessAsync(T data) => Task.FromResult<Result<T>>(Result<T>.Success(data));
+        public static Task<Response<T>> SuccessAsync(T data) => Task.FromResult<Response<T>>(Response<T>.Success(data));
 
-        public static Task<Result<T>> SuccessAsync(T data, string message) => Task.FromResult<Result<T>>(Result<T>.Success(data, message));
+        public static Task<Response<T>> SuccessAsync(T data, string message) => Task.FromResult<Response<T>>(Response<T>.Success(data, message));
     }
 }

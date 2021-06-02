@@ -38,8 +38,8 @@
                                 <img src="data:image;base64,@Convert.ToBase64String(product.Image)" class="d-block position-relative w-100" alt="user" />
                                 <div class="el-overlay w-100 overflow-hidden">
                                     <ul class="list-style-none el-info text-white text-uppercase d-inline-block p-0">
-                                        <li class="el-item d-inline-block my-0  mx-1"><a class="btn default btn-outline image-popup-vertical-fit el-link text-white border-white" onclick="ViewProduct('@product.ProductId')" href="javascript:void(0);"><i class="icon-eye-open"></i></a></li>
-                                        <li class="el-item d-inline-block my-0  mx-1"><a class="btn default btn-outline el-link text-white border-white" href="javascript:void(0);" onclick="AddToCart('@product.ProductId')"><i class="icon-shopping-cart"></i></a></li>
+                                        <li class="el-item d-inline-block my-0  mx-1"><a class="btn default btn-outline image-popup-vertical-fit el-link text-white border-white" onclick="ViewProduct('@product.ProductId')" href="javascript:void(0);"><i class="mdi mdi-eye"></i></a></li>
+                                        <li class="el-item d-inline-block my-0  mx-1"><a class="btn default btn-outline el-link text-white border-white" href="javascript:void(0);" onclick="AddToCart('@product.ProductId')"><i class="mdi mdi-cart"></i></a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -49,7 +49,7 @@
                                     <span class="text-muted">@product.Description</span>
                                 </div>
                                 <div class="ml-auto mr-3">
-                                    <button type="button" class="btn btn-dark">@product.Price</button>
+                                    <button type="button" class="btn btn-dark">R @product.Price</button>
                                 </div>
                             </div>
                         </div>
@@ -76,10 +76,17 @@
                 dataType: "json",
                 async: true,
                 success: function(response) {
-                    alert("Success " + response.Message);
+                    toastr.success(response.Message, 'Success', { timeOut: 3000 });
+                    window.location = '@Url.Action("Index", "ShoppingCart")';
                 },
-                failure: function(response) {
+                failure: function (response) {
+                    toastr.error("Error " + response.Message);
                     alert("Error " + response.Message);
+                },
+                error: function(xhr, textStatus, error){
+                    console.log(xhr.statusText);
+                    console.log(textStatus);
+                    console.log(error);
                 }
             });
         }

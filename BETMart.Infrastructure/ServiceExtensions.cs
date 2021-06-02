@@ -38,14 +38,6 @@ namespace BETMart.Infrastructure
             });
             services.AddTransient<IMailService, SMTPMailService>();
 
-            if (configuration.GetValue<bool>("UseInMemoryDatabase"))
-            {
-                services.AddDbContext<BETMartContext>(options => options.UseInMemoryDatabase("ConnectionString:BETMartDb"));
-            }
-            else
-            {
-                services.AddDbContext<BETMartContext>(options => options.UseSqlServer(configuration["ConnectionString:BETMartDb"], b => b.MigrationsAssembly(typeof(BETMartContext).Assembly.FullName)));
-            }
             services.AddIdentity<User, IdentityRole>(options =>
             {
                 options.SignIn.RequireConfirmedAccount = false;
@@ -87,14 +79,14 @@ namespace BETMart.Infrastructure
                         context.HandleResponse();
                         context.Response.StatusCode = 401;
                         context.Response.ContentType = "application/json";
-                        var result = JsonConvert.SerializeObject(Result.Fail("You are not Authorized"));
+                        var result = JsonConvert.SerializeObject(Response.Fail("You are not Authorized"));
                         return context.Response.WriteAsync(result);
                     },
                     OnForbidden = context =>
                     {
                         context.Response.StatusCode = 403;
                         context.Response.ContentType = "application/json";
-                        var result = JsonConvert.SerializeObject(Result.Fail("You are not authorized to access this resource"));
+                        var result = JsonConvert.SerializeObject(Response.Fail("You are not authorized to access this resource"));
                         return context.Response.WriteAsync(result);
                     },
                 };
@@ -111,6 +103,14 @@ namespace BETMart.Infrastructure
         }
         public static void AddPersistenceContexts(this IServiceCollection services, IConfiguration configuration)
         {
+            if (configuration.GetValue<bool>("UseInMemoryDatabase"))
+            {
+                services.AddDbContext<BETMartContext>(options => options.UseInMemoryDatabase("ConnectionString:BETMartDb"));
+            }
+            else
+            {
+                services.AddDbContext<BETMartContext>(options => options.UseSqlServer(configuration["ConnectionString:BETMartDb"], b => b.MigrationsAssembly(typeof(BETMartContext).Assembly.FullName)));
+            }
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
             services.AddScoped<IBETMartContext, BETMartContext>();
         }

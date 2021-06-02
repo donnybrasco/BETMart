@@ -18,15 +18,15 @@ namespace BETMart.BLL.Security
 {
     public interface IIdentityService
     {
-        Task<Result<TokenResponse>> GetTokenAsync(LoginModel model, string ipAddress);
+        Task<Response<TokenResponse>> GetTokenAsync(LoginModel model, string ipAddress);
 
-        Task<Result<string>> RegisterAsync(RegisterModel model, string origin);
+        Task<Response<string>> RegisterAsync(RegisterModel model, string origin);
 
-        Task<Result<string>> ConfirmEmailAsync(string userId, string code);
+        Task<Response<string>> ConfirmEmailAsync(string userId, string code);
 
         Task ForgotPassword(ForgotPasswordModel model, string origin);
 
-        Task<Result<string>> ResetPassword(ResetPasswordRequest model);
+        Task<Response<string>> ResetPassword(ResetPasswordRequest model);
     }
     public class IdentityService 
         : IIdentityService
@@ -49,7 +49,7 @@ namespace BETMart.BLL.Security
             _mailService = mailService;
         }
 
-        public async Task<Result<TokenResponse>> GetTokenAsync(LoginModel request, string ipAddress)
+        public async Task<Response<TokenResponse>> GetTokenAsync(LoginModel request, string ipAddress)
         {
             var user = await _userManager.FindByEmailAsync(request.Email);
             if (user == null)
@@ -57,15 +57,15 @@ namespace BETMart.BLL.Security
                 throw new NullReferenceException($"No Accounts Registered with {request.Email}.");
             }
             var result = await _signInManager.PasswordSignInAsync(user.Email, request.Password, false, lockoutOnFailure: false);
-            if (!user.EmailConfirmed)
-            {
+            //if (!user.EmailConfirmed)
+            //{
                 //TODO throw new Exception($"Email is not confirmed for '{model.Email}'.");
-            }
+            //}
 
-            if (!user.IsActive)
-            {
+            //if (!user.IsActive)
+            //{
                 //TODO throw new Exception($"Account for '{model.Email}' is not active. Please contact the Administrator.");
-            }
+            //}
 
             if (!result.Succeeded)
             {
@@ -85,7 +85,7 @@ namespace BETMart.BLL.Security
             response.IsVerified = user.EmailConfirmed;
             var refreshToken = GenerateRefreshToken(ipAddress);
             response.RefreshToken = refreshToken.Token;
-            return await Result<TokenResponse>.SuccessAsync(response, "Authenticated");
+            return await Response<TokenResponse>.SuccessAsync(response, "Authenticated");
         }
 
         private async Task<JwtSecurityToken> GenerateJWToken(User user, string ipAddress)
@@ -148,7 +148,7 @@ namespace BETMart.BLL.Security
             };
         }
 
-        public async Task<Result<string>> RegisterAsync(RegisterModel model, string origin)
+        public async Task<Response<string>> RegisterAsync(RegisterModel model, string origin)
         {
             var userWithSameUserName = await _userManager.FindByEmailAsync(model.Email);
             if (userWithSameUserName != null)
@@ -171,7 +171,7 @@ namespace BETMart.BLL.Security
                     var verificationUri = await SendVerificationEmail(user, origin);
                     //TODO: Attach Email Service here and configure it via appsettings
                     await _mailService.SendAsync(new MailModel() { From = "mail@betmart.co.za", To = user.Email, Body = $"Please confirm your account by <a href='{verificationUri}'>clicking here</a>.", Subject = "Confirm Registration" });
-                    return await Result<string>.SuccessAsync(user.Id, message: $"User Registered. Confirmation Mail has been delivered to your Mailbox. (DEV) Please confirm your account by visiting this URL {verificationUri}");
+                    return await Response<string>.SuccessAsync(user.Id, message: $"User Registered. Confirmation Mail has been delivered to your Mailbox. (DEV) Please confirm your account by visiting this URL {verificationUri}");
                 }
                 else
                 {
@@ -196,14 +196,14 @@ namespace BETMart.BLL.Security
             return verificationUri;
         }
 
-        public async Task<Result<string>> ConfirmEmailAsync(string userId, string code)
+        public async Task<Response<string>> ConfirmEmailAsync(string userId, string code)
         {
             var user = await _userManager.FindByIdAsync(userId);
             code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
             var result = await _userManager.ConfirmEmailAsync(user, code);
             if (result.Succeeded)
             {
-                return await Result<string>.SuccessAsync(user.Id, message: $"Account Confirmed for {user.Email}. You can now use the /api/identity/token endpoint to generate JWT.");
+                return await Response<string>.SuccessAsync(user.Id, message: $"Account Confirmed for {user.Email}. You can now use the /api/identity/token endpoint to generate JWT.");
             }
             else
             {
@@ -230,14 +230,14 @@ namespace BETMart.BLL.Security
             //await _mailService.SendAsync(emailRequest);
         }
 
-        public async Task<Result<string>> ResetPassword(ResetPasswordRequest model)
+        public async Task<Response<string>> ResetPassword(ResetPasswordRequest model)
         {
             var account = await _userManager.FindByEmailAsync(model.Email);
             if (account == null) throw new Exception($"No Accounts Registered with {model.Email}.");
             var result = await _userManager.ResetPasswordAsync(account, model.Token, model.Password);
             if (result.Succeeded)
             {
-                return Result<string>.Success(model.Email, message: $"Password Resetted.");
+                return Response<string>.Success(model.Email, message: $"Password Resetted.");
             }
             else
             {

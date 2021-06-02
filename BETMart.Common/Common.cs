@@ -11,7 +11,7 @@
             public const string Order = "/api/Order";
             public const string Product = "/api/Product";
             public const string Login = "/Token";
-            public const string Register = "/api/Account/Register";
+            public const string Register = "/Register";
         }
 
         public enum Roles

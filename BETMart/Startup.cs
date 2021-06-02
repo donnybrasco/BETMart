@@ -1,8 +1,12 @@
 using BETMart.DAL;
 using BETMart.Infrastructure;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,9 +28,20 @@ namespace BETMart
         {
             services.AddDbContext<BETMartContext>(options => options.UseSqlServer(Configuration["ConnectionString:BETMartDb"]));
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddInfrastructure(Configuration);
+            // services.AddMvc(o =>
+            // {
+            //     //Add Authentication to all Controllers by default.
+            //     var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+            //     o.Filters.Add(new AuthorizeFilter(policy));
+            // });
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(CookieAuthenticationDefaults.AuthenticationScheme).AddApplicationCookie(); 
+            services.ConfigureApplicationCookie(options => options.LoginPath = "/Account/Login");
             services.AddAutoMapper(typeof(Startup));
-            services.AddControllersWithViews();
+            services.AddControllersWithViews()
+                    .AddRazorRuntimeCompilation() //install-package Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation to get razor refresh
+                    .AddNewtonsoftJson(options =>
+                        options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+                    );
             services.AddPersistenceContexts(Configuration);
             services.AddRepositories();
             services.AddBusinessLayer();
@@ -50,7 +65,18 @@ namespace BETMart
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
+
+            // app.Use(async (context, next) =>
+            // {
+            //     if (context.User.Identity.IsAuthenticated)
+            //     {
+            //         var tokenClaim = context.User.FindFirst("access_token");
+            //         context.Request.Headers.Add("Authorization", "Bearer " + tokenClaim.Value);
+            //     }
+            //     await next();
+            // });
 
             app.UseEndpoints(endpoints =>
             {

@@ -29,21 +29,21 @@ namespace BETMart.API.Controllers
             return Ok(token);
         }
 
-        [HttpPost("register")]
+        [HttpPost("Register")]
         public async Task<IActionResult> RegisterAsync(RegisterModel model)
         {
             var origin = Request.Headers["origin"];
             return Ok(await _identityService.RegisterAsync(model, origin));
         }
 
-        [HttpGet("confirm-email")]
+        [HttpGet("ConfirmEmail")]
         [AllowAnonymous]
         public async Task<IActionResult> ConfirmEmailAsync([FromQuery] string userId, [FromQuery] string code)
         {
             return Ok(await _identityService.ConfirmEmailAsync(userId, code));
         }
 
-        [HttpPost("forgot-password")]
+        [HttpPost("ForgotPassword")]
         [AllowAnonymous]
         public async Task<IActionResult> ForgotPassword(ForgotPasswordModel model)
         {
@@ -51,7 +51,7 @@ namespace BETMart.API.Controllers
             return Ok();
         }
 
-        [HttpPost("reset-password")]
+        [HttpPost("ResetPassword")]
         [AllowAnonymous]
         public async Task<IActionResult> ResetPassword(ResetPasswordRequest model)
         {

@@ -1,8 +1,24 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
-
+@section Heads
+{
+    <style>
+        .img {
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+}
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">Welcome to BETMart</h1>
+    <div class="row img">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            <p>Find It, Love It, Buy It</p>
+            <img src="~/assets/images/logo.png" class="img center" />
+        </div>
+        <div class="col-md-4"></div>
+    </div>
+    <div style="margin-top: 50px; margin-bottom: 400px;"><a class="btn btn-success btn-lg" asp-action="Index" asp-controller="Product">Shop</a></div>
 </div>
