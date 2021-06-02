@@ -38,7 +38,7 @@
                                 <img src="data:image;base64,@Convert.ToBase64String(product.Image)" class="d-block position-relative w-100" alt="user" />
                                 <div class="el-overlay w-100 overflow-hidden">
                                     <ul class="list-style-none el-info text-white text-uppercase d-inline-block p-0">
-                                        <li class="el-item d-inline-block my-0  mx-1"><a class="btn default btn-outline image-popup-vertical-fit el-link text-white border-white" onclick="ViewProduct('@product.ProductId')" href="javascript:void(0);"><i class="mdi mdi-eye"></i></a></li>
+                                        <li class="el-item d-inline-block my-0  mx-1"><a class="btn default btn-outline image-popup-vertical-fit el-link text-white border-white" asp-controller="Product" asp-action="View" asp-route-productId="@product.ProductId"><i class="mdi mdi-eye"></i></a></li>
                                         <li class="el-item d-inline-block my-0  mx-1"><a class="btn default btn-outline el-link text-white border-white" href="javascript:void(0);" onclick="AddToCart('@product.ProductId')"><i class="mdi mdi-cart"></i></a></li>
                                     </ul>
                                 </div>

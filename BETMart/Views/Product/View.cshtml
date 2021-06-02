@@ -27,6 +27,7 @@
     <!-- ============================================================== -->
     <!-- Start Page Content -->
     <!-- ============================================================== -->
+    <form id="ProductForm" asp-action="AddToShoppingCart" asp-controller="ShoppingCart" method="post" enctype="multipart/form-data">
     <div class="row">
         <!-- Column -->
         <div class="col-lg-12">
@@ -57,6 +58,7 @@
         </div>
         <!-- Column -->
     </div>
+    </form>
     <!-- ============================================================== -->
     <!-- End PAge Content -->
     <!-- ============================================================== -->
@@ -72,7 +74,7 @@
 {
     <script>//Add product to cart
         function AddToCart(productId) {
-            var formAction = $("#ProductsForm").attr("action");
+            var formAction = $("#ProductForm").attr("action");
 
             $.ajax({
                 type: "POST",

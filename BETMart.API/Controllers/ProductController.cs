@@ -40,7 +40,22 @@ namespace BETMart.API.Controllers
             }
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("GetPaged")]
+        public async Task<IEnumerable<BLL.Models.Product>> GetPaged(int pageNumber, int pageSize)
+        {
+            try
+            {
+                var data = await _repository.GetListAsync(pageNumber, pageSize);
+                return data.Select(x => _mapper.Map<BLL.Models.Product>(x));
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, ex.Message);
+                throw;
+            }
+        }
+
+        [HttpGet("{productId}")]
         public async Task<BLL.Models.Product> Get(int productId)
         {
             try

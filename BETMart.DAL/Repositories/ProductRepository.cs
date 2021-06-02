@@ -12,6 +12,7 @@ namespace BETMart.DAL.Repositories
         IQueryable<Product> Products { get; }
 
         Task<List<Product>> GetListAsync();
+        Task<List<Product>> GetListAsync(int pageNumber, int pageSize);
 
         Task<Product> GetByIdAsync(int productId);
 
@@ -45,6 +46,10 @@ namespace BETMart.DAL.Repositories
         public async Task<List<Product>> GetListAsync()
         {
             return await _repository.Entities.ToListAsync();
+        }
+        public async Task<List<Product>> GetListAsync(int pageNumber, int pageSize)
+        {
+            return await _repository.GetPagedResponseAsync(pageNumber, pageSize);
         }
 
         public async Task<int> InsertAsync(Product product)
