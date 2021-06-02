@@ -20,9 +20,9 @@ namespace BETMart.BLL.Security
     {
         Task<Result<TokenResponse>> GetTokenAsync(LoginModel model, string ipAddress);
 
-        Task<Result<int>> RegisterAsync(RegisterModel model, string origin);
+        Task<Result<string>> RegisterAsync(RegisterModel model, string origin);
 
-        Task<Result<int>> ConfirmEmailAsync(string userId, string code);
+        Task<Result<string>> ConfirmEmailAsync(string userId, string code);
 
         Task ForgotPassword(ForgotPasswordModel model, string origin);
 
@@ -32,13 +32,13 @@ namespace BETMart.BLL.Security
         : IIdentityService
     {
         private readonly UserManager<User> _userManager;
-        private readonly RoleManager<Role> _roleManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly SignInManager<User> _signInManager;
         private readonly JWTSettings _jwtSettings;
         private readonly IMailService _mailService;
 
         public IdentityService(UserManager<User> userManager,
-            RoleManager<Role> roleManager,
+            RoleManager<IdentityRole> roleManager,
             IOptions<JWTSettings> jwtSettings,
             SignInManager<User> signInManager, IMailService mailService)
         {
@@ -74,7 +74,7 @@ namespace BETMart.BLL.Security
             JwtSecurityToken jwtSecurityToken = await GenerateJWToken(user, ipAddress);
             var response = new TokenResponse
             {
-                Id = user.UserId,
+                Id = user.Id,
                 JWToken = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken),
                 IssuedOn = jwtSecurityToken.ValidFrom.ToLocalTime(),
                 ExpiresOn = jwtSecurityToken.ValidTo.ToLocalTime(),
@@ -102,7 +102,7 @@ namespace BETMart.BLL.Security
                 new Claim(JwtRegisteredClaimNames.Sub, user.Email),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                new Claim("uid", user.UserId.ToString()),
+                new Claim("uid", user.Id),
                 new Claim("first_name", user.FirstName),
                 new Claim("last_name", user.LastName),
                 new Claim("full_name", $"{user.FirstName} {user.LastName}"),
@@ -148,7 +148,7 @@ namespace BETMart.BLL.Security
             };
         }
 
-        public async Task<Result<int>> RegisterAsync(RegisterModel model, string origin)
+        public async Task<Result<string>> RegisterAsync(RegisterModel model, string origin)
         {
             var userWithSameUserName = await _userManager.FindByEmailAsync(model.Email);
             if (userWithSameUserName != null)
@@ -170,8 +170,8 @@ namespace BETMart.BLL.Security
                     await _userManager.AddToRoleAsync(user, BETMart.Common.Common.Roles.Basic.ToString());
                     var verificationUri = await SendVerificationEmail(user, origin);
                     //TODO: Attach Email Service here and configure it via appsettings
-                    await _mailService.SendAsync(new MailModel() { From = "mail@codewithmukesh.com", To = user.Email, Body = $"Please confirm your account by <a href='{verificationUri}'>clicking here</a>.", Subject = "Confirm Registration" });
-                    return await Result<int>.SuccessAsync(user.UserId, message: $"User Registered. Confirmation Mail has been delivered to your Mailbox. (DEV) Please confirm your account by visiting this URL {verificationUri}");
+                    await _mailService.SendAsync(new MailModel() { From = "mail@betmart.co.za", To = user.Email, Body = $"Please confirm your account by <a href='{verificationUri}'>clicking here</a>.", Subject = "Confirm Registration" });
+                    return await Result<string>.SuccessAsync(user.Id, message: $"User Registered. Confirmation Mail has been delivered to your Mailbox. (DEV) Please confirm your account by visiting this URL {verificationUri}");
                 }
                 else
                 {
@@ -190,20 +190,20 @@ namespace BETMart.BLL.Security
             code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
             var route = "api/identity/confirm-email/";
             var _enpointUri = new Uri(string.Concat($"{origin}/", route));
-            var verificationUri = QueryHelpers.AddQueryString(_enpointUri.ToString(), "userId", user.UserId.ToString());
+            var verificationUri = QueryHelpers.AddQueryString(_enpointUri.ToString(), "userId", user.Id);
             verificationUri = QueryHelpers.AddQueryString(verificationUri, "code", code);
             //Email Service Call Here
             return verificationUri;
         }
 
-        public async Task<Result<int>> ConfirmEmailAsync(string userId, string code)
+        public async Task<Result<string>> ConfirmEmailAsync(string userId, string code)
         {
             var user = await _userManager.FindByIdAsync(userId);
             code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
             var result = await _userManager.ConfirmEmailAsync(user, code);
             if (result.Succeeded)
             {
-                return await Result<int>.SuccessAsync(user.UserId, message: $"Account Confirmed for {user.Email}. You can now use the /api/identity/token endpoint to generate JWT.");
+                return await Result<string>.SuccessAsync(user.Id, message: $"Account Confirmed for {user.Email}. You can now use the /api/identity/token endpoint to generate JWT.");
             }
             else
             {

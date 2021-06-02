@@ -21,6 +21,7 @@ namespace BETMart.DAL.Entities
         public decimal Price { get; set; }
 
         public byte[] Image { get; set; }
+        public string ImagePath { get; set; } //TODO: for performance
 
     }
 }

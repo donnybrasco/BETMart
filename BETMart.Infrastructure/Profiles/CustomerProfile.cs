@@ -8,7 +8,7 @@ namespace BETMart.Infrastructure.Profiles
     {
         public CustomerProfile()
         {
-            CreateMap<DAL.Entities.Customer, Customer>().ReverseMap();
+            CreateMap<DAL.Entities.User, Customer>().ReverseMap();
             CreateMap<DAL.Entities.Address, Customer>().ReverseMap();
         }
     }

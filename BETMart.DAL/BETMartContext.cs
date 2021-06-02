@@ -1,10 +1,12 @@
-﻿using System;
+﻿using BETMart.DAL.Core;
+using BETMart.DAL.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using BETMart.DAL.Core;
-using BETMart.DAL.Entities;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace BETMart.DAL
 {
@@ -16,7 +18,6 @@ namespace BETMart.DAL
         Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = new CancellationToken(), string userId = null);
         //-----
         DbSet<User> Users { get; set; }
-        DbSet<Customer> Customers { get; set; }
         DbSet<Address> Addresses { get; set; }
         DbSet<BillingInformation> BillingInformations { get; set; }
         DbSet<Product> Products { get; set; }
@@ -24,7 +25,7 @@ namespace BETMart.DAL
         DbSet<OrderDetail> OrderDetails { get; set; }
     }
     public class BETMartContext
-        : DbContext
+        : IdentityDbContext<User>
         , IBETMartContext
     {
         #region Ctor
@@ -32,7 +33,7 @@ namespace BETMart.DAL
         public BETMartContext(DbContextOptions<BETMartContext> opts)
             : base(opts)
         {
-    }
+        }
 
         #endregion
 
@@ -43,6 +44,40 @@ namespace BETMart.DAL
             base.OnModelCreating(builder);
 
             //builder.InitializeSeedData();
+            builder.Entity<User>(entity =>
+            {
+                entity.ToTable(name: "Users");
+            });
+
+            builder.Entity<IdentityRole>(entity =>
+            {
+                entity.ToTable(name: "Roles");
+            });
+            builder.Entity<IdentityUserRole<string>>(entity =>
+            {
+                entity.ToTable("UserRoles");
+            });
+
+            builder.Entity<IdentityUserClaim<string>>(entity =>
+            {
+                entity.ToTable("UserClaims");
+            });
+
+            builder.Entity<IdentityUserLogin<string>>(entity =>
+            {
+                entity.ToTable("UserLogins");
+            });
+
+            builder.Entity<IdentityRoleClaim<string>>(entity =>
+            {
+                entity.ToTable("RoleClaims");
+            });
+
+            builder.Entity<IdentityUserToken<string>>(entity =>
+            {
+                entity.ToTable("UserTokens");
+            });
+
         }
 
         #endregion
@@ -50,7 +85,6 @@ namespace BETMart.DAL
         #region DbSets
 
         public DbSet<User> Users { get; set; }
-        public DbSet<Customer> Customers { get; set; }
         public DbSet<Address> Addresses { get; set; }
         public DbSet<BillingInformation> BillingInformations { get; set; }
         public DbSet<Product> Products { get; set; }

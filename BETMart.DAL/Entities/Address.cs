@@ -28,8 +28,8 @@ namespace BETMart.DAL.Entities
         [MaxLength(100)]
         public string Country { get; set; }
 
-        public int CustomerId { get; set; }
-        [ForeignKey(nameof(CustomerId))]
-        public Customer Customer { get; set; }
+        public string UserId { get; set; }
+        [ForeignKey(nameof(UserId))]
+        public User User { get; set; }
     }
 }

@@ -4,14 +4,16 @@ using BETMart.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BETMart.DAL.Migrations
 {
     [DbContext(typeof(BETMartContext))]
-    partial class BETMartContextModelSnapshot : ModelSnapshot
+    [Migration("20210601235350_add_image_path")]
+    partial class add_image_path
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

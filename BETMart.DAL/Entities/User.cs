@@ -1,31 +1,29 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using BETMart.DAL.Core;
 using Microsoft.AspNetCore.Identity;
 
 namespace BETMart.DAL.Entities
 {
     [Table(nameof(User))]
     public class User
-        : EntityBase
+        : IdentityUser
     {
-        [Key]
-        public int UserId { get; set; }
-        [Required]
-        [MaxLength(250)]
-        public string Email { get; set; }
         [Required]
         [MaxLength(50)]
         public string FirstName { get; set; }
         [Required]
         [MaxLength(50)]
         public string LastName { get; set; }
-        [Required]
-        [MaxLength(50)]
-        public string Password { get; set; }
-        public virtual bool EmailConfirmed { get; set; }
         public byte[] ProfilePicture { get; set; }
         public bool IsActive { get; set; } = false;
+        [Phone]
+        [MaxLength(13)]
+        public string Phone { get; set; }
+        [Phone]
+        [MaxLength(13)]
+        public string Mobile { get; set; }
+        public Address Address { get; set; }
+        public BillingInformation BillingInformation { get; set; }
     }
 }
