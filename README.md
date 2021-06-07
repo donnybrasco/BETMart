@@ -16,6 +16,7 @@ Basic e-commerce shopping website
 <p align="center">
 	<a href="https://betmart.azurewebsites.net">Try Online</a> ∙
 </p>
+* Email john.doe@abc.com (P@$$w0rd!)
 
 BETMart is a free, open source, e-commerce shopping cart that allows customers to buy products online. It is web standards compliant and incorporates the newest Microsoft web technology stack.
 
