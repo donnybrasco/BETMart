@@ -54,7 +54,7 @@ namespace BETMart.BLL.Security
             var user = await _userManager.FindByEmailAsync(request.Email);
             if (user == null)
             {
-                throw new NullReferenceException($"No Accounts Registered with {request.Email}.");
+                await Response<TokenResponse>.FailAsync($"No Accounts Registered with {request.Email}.");
             }
             var result = await _signInManager.PasswordSignInAsync(user.Email, request.Password, false, lockoutOnFailure: false);
             //if (!user.EmailConfirmed)
@@ -69,7 +69,7 @@ namespace BETMart.BLL.Security
 
             if (!result.Succeeded)
             {
-                throw new Exception($"Wrong Credentials entered for '{request.Email}'.");
+                await Response<TokenResponse>.FailAsync($"Wrong Credentials entered for '{request.Email}'.");
             }
             JwtSecurityToken jwtSecurityToken = await GenerateJWToken(user, ipAddress);
             var response = new TokenResponse

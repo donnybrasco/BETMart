@@ -6,12 +6,12 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging.AzureAppServices;
 
 namespace BETMart
 {
@@ -42,6 +42,7 @@ namespace BETMart
                     .AddNewtonsoftJson(options =>
                         options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
                     );
+            services.Configure<AzureFileLoggerOptions>(Configuration.GetSection("AzureLogging"));
             services.AddPersistenceContexts(Configuration);
             services.AddRepositories();
             services.AddBusinessLayer();

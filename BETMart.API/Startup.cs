@@ -8,6 +8,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.AzureAppServices;
 using Microsoft.OpenApi.Models;
 
 namespace BETMart.API
@@ -28,6 +30,14 @@ namespace BETMart.API
         /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
         {
+            if (Configuration.GetValue<bool>("UseInMemoryDatabase"))
+            {
+                services.AddDbContext<BETMartContext>(options => options.UseInMemoryDatabase("ConnectionString:BETMartDb"));
+            }
+            else
+            {
+                services.AddDbContext<BETMartContext>(options => options.UseSqlServer(Configuration["ConnectionString:BETMartDb"], b => b.MigrationsAssembly(typeof(BETMartContext).Assembly.FullName)));
+            }
             services.AddControllers(); 
             services.AddCors();
             services.AddSwagger();
@@ -35,12 +45,13 @@ namespace BETMart.API
             services.AddAutoMapper(typeof(Startup));
             services.AddPersistenceContexts(Configuration);
             services.AddRepositories();
-            services.AddBusinessLayer();
+            services.AddBusinessLayer(); 
+            services.Configure<AzureFileLoggerOptions>(Configuration.GetSection("AzureLogging"));
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -54,7 +65,7 @@ namespace BETMart.API
                 options.RoutePrefix = "swagger";
                 options.DisplayRequestDuration();
             });
-
+            
             app.UseHttpsRedirection();
 
             app.UseRouting();
