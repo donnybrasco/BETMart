@@ -19,6 +19,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
+using IMailService = BETMart.BLL.Notifications.IMailService;
+using MailSettings = BETMart.BLL.Notifications.MailSettings;
+using SmtpMailService = BETMart.BLL.Notifications.SmtpMailService;
 
 namespace BETMart.Infrastructure
 {
@@ -26,17 +29,8 @@ namespace BETMart.Infrastructure
     {
         public static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddTransient<ISettings, Settings>();
             services.AddTransient<IIdentityService, IdentityService>();
-            services.Configure<MailSettings>("MailSettings", a =>
-            {
-                a.DisplayName = configuration["MailSettings:DisplayName"];
-                a.From = configuration["MailSettings:From"];
-                a.Host = configuration["MailSettings:Host"];
-                a.Port = Convert.ToInt32(configuration["MailSettings:Port"]);
-                a.UserName = configuration["MailSettings:UserName"];
-                a.Password = configuration["MailSettings:Password"];
-            });
-            services.AddTransient<IMailService, SMTPMailService>();
 
             services.AddIdentity<User, IdentityRole>(options =>
             {
@@ -93,13 +87,25 @@ namespace BETMart.Infrastructure
             });
         }
 
-        public static void AddBusinessLayer(this IServiceCollection services)
+        public static void AddBusinessLayer(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<ISettings, Settings>();
             services.AddTransient<IHttpService, HttpService>();
+            services.AddTransient<IMailService, SmtpMailService>();
+            services.AddTransient<INotificationService, NotificationService>();
             services.AddTransient<IProductService, ProductService>();
             services.AddTransient<IOrderService, OrderService>();
+            services.AddTransient<IUniqueCodeGenerator, UniqueCodeGenerator>();
+            services.Configure<MailSettings>("MailSettings", a =>
+            {
+                a.DisplayName = configuration["MailSettings:DisplayName"];
+                a.From = configuration["MailSettings:From"];
+                a.Host = configuration["MailSettings:Host"];
+                a.Port = Convert.ToInt32(configuration["MailSettings:Port"]);
+                a.UserName = configuration["MailSettings:UserName"];
+                a.Password = configuration["MailSettings:Password"];
+            });
         }
         public static void AddPersistenceContexts(this IServiceCollection services, IConfiguration configuration)
         {

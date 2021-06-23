@@ -8,6 +8,10 @@ namespace BETMart.DAL
     {
         private readonly IConfiguration _configuration;
 
+        public BETMartContextFactory()
+        {
+            
+        }
         public BETMartContextFactory(IConfiguration configuration)
         {
             _configuration = configuration;
@@ -15,7 +19,7 @@ namespace BETMart.DAL
         public BETMartContext CreateDbContext(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<BETMartContext>();
-            optionsBuilder.UseSqlServer(_configuration["ConnectionString:BETMartDb"]);
+            optionsBuilder.UseSqlServer("Server=tcp:smarttech.database.windows.net,1433;Initial Catalog=betmart;Persist Security Info=False;User ID=dbadmin;Password=Mistral!@3;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
 
             return new BETMartContext(optionsBuilder.Options);
         }

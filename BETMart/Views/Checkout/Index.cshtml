@@ -1,8 +1,6 @@
 ﻿@model CheckoutViewModel
-@{
-    ViewData["Title"] = "Checkout Products";
-    Layout = "_Layout";
-}
+@{ ViewData["Title"] = "Checkout Products";
+                Layout = "_Layout"; }
 <!-- ============================================================== -->
 <!-- Bread crumb and right sidebar toggle -->
 <!-- ============================================================== -->
@@ -54,12 +52,12 @@
         <!-- Column -->
         <!-- Column -->
         <div class="col-lg-3 col-md-6">
-            
+
         </div>
         <!-- Column -->
         <!-- Column -->
         <div class="col-lg-3 col-md-6">
-           
+
         </div>
         <!-- Column -->
     </div>
@@ -74,32 +72,31 @@
                     <div class="table-responsive">
                         <table class="table table-bordered">
                             <thead>
-                            <tr>
-                                <th>Photo</th>
-                                <th>Product</th>
-                                <th>Quantity</th>
-                                <th>Price</th>
-                                <th>Total</th>
-                            </tr>
+                                <tr>
+                                    <th>Photo</th>
+                                    <th>Product</th>
+                                    <th>Quantity</th>
+                                    <th>Price</th>
+                                    <th>Total</th>
+                                </tr>
                             </thead>
                             <tbody>
-                            @foreach (var orderDetail in Model.Current.OrderDetails)
-                            {
+                                @foreach (var orderDetail in Model.Current.OrderDetails)
+                                {
+                    <tr>
+                        <td width="150"><img src="data:image;base64,@Convert.ToBase64String(orderDetail.Product.Image)" alt="iMac" width="80"></td>
+                        <td width="550">
+                            <h5 class="font-500">@orderDetail.Product.Name</h5>
+                            <p>@orderDetail.Product.Description</p>
+                        </td>
+                        <td>@orderDetail.Price</td>
+                        <td>@orderDetail.Quantity</td>
+                        <td width="150" align="center" class="font-500">@orderDetail.Total</td>
+                    </tr>}
                                 <tr>
-                                    <td width="150"><img src="data:image;base64,@Convert.ToBase64String(orderDetail.Product.Image)" alt="iMac" width="80"></td>
-                                    <td width="550">
-                                        <h5 class="font-500">@orderDetail.Product.Name</h5>
-                                        <p>@orderDetail.Product.Description</p>
-                                    </td>
-                                    <td>@orderDetail.Price</td>
-                                    <td>@orderDetail.Quantity</td>
-                                    <td width="150" align="center" class="font-500">@orderDetail.Total</td>
+                                    <td colspan="4" class="font-500" align="right">Total Amount</td>
+                                    <td class="font-500">@Model.TotalCost</td>
                                 </tr>
-                            }
-                            <tr>
-                                <td colspan="3" class="font-500" align="right">Total Amount</td>
-                                <td class="font-500">@Model.TotalCost</td>
-                            </tr>
                             </tbody>
                         </table>
                     </div>
@@ -128,7 +125,6 @@
                         <div role="tabpanel" class="tab-pane active" id="iprofile">
                             <div class="row">
                                 <div class="col-md-7">
-                                    <form>
                                         <div class="form-group input-group mt-5">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text"><i class="fab fa-cc-visa"></i></span>
@@ -139,13 +135,13 @@
                                             <div class="col-xs-7 col-md-7">
                                                 <div class="form-group">
                                                     <label>EXPIRATION DATE</label>
-                                                    <input type="text" class="form-control" name="Expiry" placeholder="MM / YY" required="">
+                                                    <input type="text" class="form-control" name="Expiry" placeholder="MM/YY">
                                                 </div>
                                             </div>
                                             <div class="col-xs-5 col-md-5 pull-right">
                                                 <div class="form-group">
                                                     <label>CV CODE</label>
-                                                    <input type="text" class="form-control" name="CVC" placeholder="CVC" required="">
+                                                    <input type="text" class="form-control" name="CVC" placeholder="CVC">
                                                 </div>
                                             </div>
                                         </div>
@@ -157,8 +153,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <button class="btn btn-info">Make Payment</button>
-                                    </form>
+                                        <button class="btn btn-info" onclick="sendInvoice('@Model.Current.OrderId')">Make Payment</button>
                                 </div>
                                 <div class="col-md-4 ml-auto">
                                     <h4 class="card-title mt-4">General Info</h4>
@@ -184,3 +179,30 @@
     <!-- End Right sidebar -->
     <!-- ============================================================== -->
 </div>
+@section Scripts
+{
+    <script>
+        function sendInvoice(orderId) {
+            $.ajax({
+                type: "POST",
+                url: `@Url.Action("SendInvoice","Checkout")?orderId=${orderId}`,
+                contentType: "application/json",
+                dataType: "json",
+                async: true,
+                success: function(response) {
+                    toastr.success("Email sent successfully", 'Success', { timeOut: 3000 });
+                    window.location = '@Url.Action("Index", "Product")';
+                },
+                failure: function (response) {
+                    toastr.error("Error " + response.Message);
+                    alert("Error " + response.Message);
+                },
+                error: function(xhr, textStatus, error){
+                    console.log(xhr.statusText);
+                    console.log(textStatus);
+                    console.log(error);
+                }
+            });
+        }
+    </script>
+}

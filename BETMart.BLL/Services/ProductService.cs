@@ -90,6 +90,7 @@ namespace BETMart.BLL.Services
             try
             {
                 using HttpClient client = new HttpClient { BaseAddress = new Uri(_configuration["AppSettings:BETMart.API"]) };
+                MediaTypeWithQualityHeaderValue contentType = new MediaTypeWithQualityHeaderValue(Common.Common.ContentType.Json);
                 client.DefaultRequestHeaders.Add("Authorization", "Bearer " + _userService.Token);
                 string stringData = JsonConvert.SerializeObject(obj);
                 var contentData = new StringContent(stringData, Encoding.UTF8, Common.Common.ContentType.Json);
@@ -107,6 +108,7 @@ namespace BETMart.BLL.Services
             try
             {
                 using var client = new HttpClient { BaseAddress = new Uri(_configuration["AppSettings:BETMart.API"]) };
+                MediaTypeWithQualityHeaderValue contentType = new MediaTypeWithQualityHeaderValue(Common.Common.ContentType.Json);
                 client.DefaultRequestHeaders.Add("Authorization", "Bearer " + _userService.Token);
                 string stringData = JsonConvert.SerializeObject(obj);
                 var contentData = new StringContent(stringData, Encoding.UTF8, Common.Common.ContentType.Json);
@@ -124,6 +126,7 @@ namespace BETMart.BLL.Services
             try
             {
                 using var client = new HttpClient { BaseAddress = new Uri(_configuration["AppSettings:BETMart.API"]) };
+                MediaTypeWithQualityHeaderValue contentType = new MediaTypeWithQualityHeaderValue(Common.Common.ContentType.Json);
                 client.DefaultRequestHeaders.Add("Authorization", "Bearer " + _userService.Token);
                 HttpResponseMessage response = await client.DeleteAsync($"{Common.Common.APIEndpoint.Product}/{productId}");
                 await response.Content.ReadAsStringAsync();

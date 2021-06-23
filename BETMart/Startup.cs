@@ -45,7 +45,7 @@ namespace BETMart
             services.Configure<AzureFileLoggerOptions>(Configuration.GetSection("AzureLogging"));
             services.AddPersistenceContexts(Configuration);
             services.AddRepositories();
-            services.AddBusinessLayer();
+            services.AddBusinessLayer(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

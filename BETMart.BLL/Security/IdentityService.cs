@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Net.Mail;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -147,19 +148,21 @@ namespace BETMart.BLL.Security
                 CreatedByIp = ipAddress
             };
         }
-
+        
         public async Task<Response<string>> RegisterAsync(RegisterModel model, string origin)
         {
             var userWithSameUserName = await _userManager.FindByEmailAsync(model.Email);
             if (userWithSameUserName != null)
             {
-                throw new Exception($"Email Address '{model.Email}' is already taken.");
+                return await Response<string>.FailAsync($"Email Address '{model.Email}' is already taken.");
             }
             var user = new User
             {
                 Email = model.Email,
                 FirstName = model.FirstName,
-                LastName = model.LastName
+                LastName = model.LastName,
+                UserName = model.Email,
+                EmailConfirmed = true,
             };
             var userWithSameEmail = await _userManager.FindByEmailAsync(model.Email);
             if (userWithSameEmail == null)
@@ -168,19 +171,19 @@ namespace BETMart.BLL.Security
                 if (result.Succeeded)
                 {
                     await _userManager.AddToRoleAsync(user, BETMart.Common.Common.Roles.Basic.ToString());
-                    var verificationUri = await SendVerificationEmail(user, origin);
+                    //var verificationUri = await SendVerificationEmail(user, origin);
                     //TODO: Attach Email Service here and configure it via appsettings
-                    await _mailService.SendAsync(new MailModel() { From = "mail@betmart.co.za", To = user.Email, Body = $"Please confirm your account by <a href='{verificationUri}'>clicking here</a>.", Subject = "Confirm Registration" });
-                    return await Response<string>.SuccessAsync(user.Id, message: $"User Registered. Confirmation Mail has been delivered to your Mailbox. (DEV) Please confirm your account by visiting this URL {verificationUri}");
+                    //await _mailService.SendAsync(new MailMessage() { From = "mail@betmart.co.za", To = user.Email, Body = $"Please confirm your account by <a href='{verificationUri}'>clicking here</a>.", Subject = "Confirm Registration" });
+                    return await Response<string>.SuccessAsync(user.Id, message: $"User Registered.");
                 }
                 else
                 {
-                    throw new Exception($"{result.Errors}");
+                    return await Response<string>.FailAsync($"{result.Errors}");
                 }
             }
             else
             {
-                throw new Exception($"Email {model.Email } is already registered.");
+                return await Response<string>.FailAsync($"Email {model.Email } is already registered.");
             }
         }
 

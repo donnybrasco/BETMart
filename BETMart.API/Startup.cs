@@ -45,7 +45,7 @@ namespace BETMart.API
             services.AddAutoMapper(typeof(Startup));
             services.AddPersistenceContexts(Configuration);
             services.AddRepositories();
-            services.AddBusinessLayer(); 
+            services.AddBusinessLayer(Configuration); 
             services.Configure<AzureFileLoggerOptions>(Configuration.GetSection("AzureLogging"));
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }

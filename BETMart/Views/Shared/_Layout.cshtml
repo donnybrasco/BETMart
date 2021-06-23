@@ -46,7 +46,7 @@
         <!-- ============================================================== -->
         <header class="topbar">
             <nav class="navbar top-navbar navbar-expand-md navbar-dark">
-                <div class="navbar-header">
+                <div class="navbar-header" style="background-color:#fff">
                     <!-- This is for the sidebar toggle which is visible on mobile only -->
                     <a class="nav-toggler waves-effect waves-light d-block d-md-none" href="javascript:void(0)">
                         <i class="ti-menu ti-close"></i>
@@ -257,6 +257,11 @@
                         <li class="sidebar-item">
                             <a class="sidebar-link waves-effect waves-dark sidebar-link" asp-area="" asp-controller="Product" asp-action="Index" aria-expanded="false">
                                 <i class="mdi mdi-calendar"></i><span class="hide-menu">Products</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-item">
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link" asp-area="" asp-controller="ShoppingCart" asp-action="Index" aria-expanded="false">
+                                <i class="mdi mdi-calendar"></i><span class="hide-menu">Shopping Cart</span>
                             </a>
                         </li>
                         <li class="sidebar-item">

@@ -50,10 +50,10 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    @foreach (var orderDetail in Model.Current.OrderDetails)
+                                    @foreach (var orderDetail in Model.Current?.OrderDetails)
                                     {
                                         <tr>
-                                            <td width="150"><img src="data:image;base64,@Convert.ToBase64String(orderDetail.Product.Image)" alt="iMac" width="80"></td>
+                                            <td width="150"><img src="data:image;base64,@Convert.ToBase64String(orderDetail.Product.Image)" alt="Product" width="80"></td>
                                             <td width="550">
                                                 <h5 class="font-500">@orderDetail.Product.Name</h5>
                                                 <p>@orderDetail.Product.Description</p>
@@ -90,7 +90,7 @@
                             <h2>@Model.TotalCost</h2>
                             <hr>
                             <button class="btn btn-success" asp-controller="Checkout" asp-action="Index">Checkout</button>
-                            <button class="btn btn-secondary btn-outline">Cancel</button>
+                            <button class="btn btn-secondary btn-outline" asp-controller="Product" asp-action="Index">Cancel</button>
                         </div>
                     </div>
                     <div class="card">

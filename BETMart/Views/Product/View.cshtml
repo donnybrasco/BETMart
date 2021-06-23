@@ -43,7 +43,7 @@
                             <h4 class="box-title mt-5">Product description</h4>
                             <p>@Model.Description</p>
                             <h2 class="mt-5">R @Model.Price <small class="text-success">(36% off)</small></h2>
-                            <button class="btn btn-primary btn-rounded" onclick="AddToCart('@Model.ProductId')"><i class="ti-shopping-cart"></i> Buy Now </button>
+                            <button class="btn btn-primary btn-rounded" type="button" onclick="AddToCart('@Model.ProductId')"><i class="ti-shopping-cart"></i> Buy Now </button>
                             <h3 class="box-title mt-5">Key Highlights</h3>
                             <ul class="list-unstyled">
                                 <li><i class="fa fa-check text-success"></i> Sturdy structure</li>
@@ -71,7 +71,8 @@
 </div>
 @section Scripts
 {
-    <script>//Add product to cart
+    <script>
+        //Add product to cart
         function AddToCart(productId) {
             var formAction = $("#ProductForm").attr("action");
 

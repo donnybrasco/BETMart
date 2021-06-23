@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using BETMart.BLL._Core;
+using BETMart.BLL.Models;
 using BETMart.BLL.Services;
 using BETMart.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -29,9 +30,16 @@ namespace BETMart.Controllers
             var model = new CheckoutViewModel
             {
                 Name = _userService.Name,
-                Current = response.Data
+                Current = response.Data ?? new Order()
             };
             return View(model);
+        }
+
+        public async Task<IActionResult> SendInvoice(int orderId)
+        {
+            var response = await _orderService.SendInvoice(orderId);
+
+            return Ok(response);
         }
     }
 }

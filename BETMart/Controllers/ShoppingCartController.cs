@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using BETMart.BLL.Models;
 using BETMart.BLL.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -25,7 +26,7 @@ namespace BETMart.Controllers
             var response = await _service.GetCurrentOrder();
             var model = new ShoppingCartViewModel
             {
-                Current = response.Data,
+                Current = response.Data ?? new Order(),
                 ErrorMessage = response.Message
             };
             return View("Index", model);

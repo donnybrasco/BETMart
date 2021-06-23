@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -82,9 +83,18 @@ namespace BETMart.Controllers
         public async Task<IActionResult> Register(RegisterModel model)
         {
             using HttpClient client = new HttpClient { BaseAddress = new Uri(_configuration["AppSettings:BETMart.API"]) };
-            string stringData = JsonConvert.SerializeObject(model);
-            var contentData = new StringContent(stringData, Encoding.UTF8, Common.Common.ContentType.Json);
-            HttpResponseMessage response = await client.PostAsync(Common.Common.APIEndpoint.Register, contentData);
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(Common.Common.ContentType.Json));
+            //string stringData = JsonConvert.SerializeObject(model);
+            //var contentData = new StringContent(stringData, Encoding.UTF8, Common.Common.ContentType.Json);
+            HttpContent content = new FormUrlEncodedContent(new[]
+            {
+                new KeyValuePair<string, string>("email", model.Email),
+                new KeyValuePair<string, string>("password", model.Password),
+                new KeyValuePair<string, string>("confirmPassword", model.ConfirmPassword),
+                new KeyValuePair<string, string>("firstName", model.FirstName),
+                new KeyValuePair<string, string>("lastName", model.LastName)
+            });
+            HttpResponseMessage response = await client.PostAsync(Common.Common.APIEndpoint.Register, content);
             var result = await response.Content.ReadAsStringAsync();
 
             var response2 = JsonConvert.DeserializeObject<Response<string>>(result);
@@ -96,11 +106,11 @@ namespace BETMart.Controllers
                     Email = model.Email,
                     Password = model.Password
                 };
-                await Login(loginModel);
+                return await Login(loginModel);
             }
 
             ViewBag.ErrorMessage = response2.Message;
-            return View("Login");
+            return View("Register");
         }
     }
 }
