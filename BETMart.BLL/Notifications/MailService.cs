@@ -33,7 +33,7 @@ namespace BETMart.BLL.Notifications
         {
             try
             {
-                var client = new SendGridClient("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");
+                var client = new SendGridClient("");
                 var msg = model.GetSendGridMessage();
                 var response = await client.SendEmailAsync(msg);
                 if (response.StatusCode != HttpStatusCode.OK)
